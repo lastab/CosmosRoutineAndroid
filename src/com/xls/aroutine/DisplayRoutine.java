@@ -3,6 +3,8 @@ package com.xls.aroutine;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -23,6 +25,12 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 public class DisplayRoutine extends Activity {
+	////////////Declerations
+	DateFormat formatter = new SimpleDateFormat("HH:mm");
+	TableRow[] Trow= new TableRow[9];
+	Date[] startTime=new Date[9], 	endTime=new Date[9];
+	
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -99,9 +107,7 @@ public class DisplayRoutine extends Activity {
         
 
 		TableLayout disArea= (TableLayout) findViewById(R.id.tblDisplayRoutine);
-		for (int rows=0;rows <9;rows++){
-			
-			
+		for (int rows=0;rows <9;rows++){			
 		  	TableRow tableRow= new TableRow(this);
 		  	disArea.addView(tableRow);
         	if (rows%2==0){
@@ -117,11 +123,9 @@ public class DisplayRoutine extends Activity {
         		Period.setLayoutParams(new TableRow.LayoutParams(
             			TableRow.LayoutParams.MATCH_PARENT,
             			TableRow.LayoutParams.MATCH_PARENT,1.0f
-            			));
-        		//Period.setTextSize(3, 10);
+            			));        		
         		Period.setText(cell.toString().substring(0,1)+". ");
-        		tableRow.addView(Period);
-        		//Toast.makeText(this, "cell Value: " + cell.toString(), Toast.LENGTH_SHORT).show();
+        		tableRow.addView(Period);        		
         		cell=row.getCell(2);
         		timeRange =cell.toString();
         		
@@ -130,31 +134,29 @@ public class DisplayRoutine extends Activity {
             			TableRow.LayoutParams.MATCH_PARENT,
             			TableRow.LayoutParams.MATCH_PARENT,1.0f
             			));
-        		//Time1.setTextSize(3, 10);
-        		temp=timeRange.substring(0,9);            		
-        		Time1.setText(temp);
-        		temp=temp.replace(".", "");
-        		//startTime[i] = (Date)formatter.parse(temp.trim());
-
+        		temp=timeRange.substring(0,9);
+        		temp=temp.replace("a.m.", "");
+        		temp=temp.replace("p.m.", "");
+        		Time1.setText(temp);        		
+        		startTime[rows] = (Date)formatter.parse(temp.trim());
         		tableRow.addView(Time1);
         		TextView Time2 = new TextView(this);
         		Time2.setLayoutParams(new TableRow.LayoutParams(
             			TableRow.LayoutParams.MATCH_PARENT,
             			TableRow.LayoutParams.MATCH_PARENT,1.0f
             			));
-        		//Time2.setTextSize(3, 10);
-        		temp=timeRange.substring(11);            		
+        		temp=timeRange.substring(11);
+        		temp=temp.replace("a.m.", "");
+        		temp=temp.replace("p.m.", "");
         		Time2.setText(temp);
-        		temp=temp.replace(".", "");
-        		//endTime[i] = (Date)formatter.parse(temp.trim());
+        		endTime[rows] = (Date)formatter.parse(temp.trim());
         		tableRow.addView(Time2);  		
         		cell=row.getCell(26*4+1);
         		TextView Subject2 = new TextView(this);
         		Subject2.setLayoutParams(new TableRow.LayoutParams(
             			TableRow.LayoutParams.MATCH_PARENT,
             			TableRow.LayoutParams.MATCH_PARENT,1.0f
-            			));
-        		//Subject2.setTextSize(3, 10);            	
+            			));            	
         		try{
         			Subject2.setText(cell.toString());
         			tableRow.addView(Subject2);
@@ -164,8 +166,7 @@ public class DisplayRoutine extends Activity {
         			Teacher.setLayoutParams(new TableRow.LayoutParams(
                 			TableRow.LayoutParams.MATCH_PARENT,
                 			TableRow.LayoutParams.MATCH_PARENT,1.0f
-                			));
-        			//Teacher.setTextSize(3, 10);            			
+                			));            			
             		Teacher.setText(cell.toString().trim());
             		tableRow.addView(Teacher);
             		
@@ -176,8 +177,7 @@ public class DisplayRoutine extends Activity {
         			ClassType.setLayoutParams(new TableRow.LayoutParams(
                 			TableRow.LayoutParams.MATCH_PARENT,
                 			TableRow.LayoutParams.MATCH_PARENT,1.0f
-                			));
-        			//ClassType.setTextSize(3, 10);            			
+                			));            			
             		ClassType.setText(cell.toString().trim());
             		tableRow.addView(ClassType);
             		
@@ -187,8 +187,7 @@ public class DisplayRoutine extends Activity {
             			Room.setLayoutParams(new TableRow.LayoutParams(
                     			TableRow.LayoutParams.MATCH_PARENT,
                     			TableRow.LayoutParams.MATCH_PARENT,1.0f
-                    			));
-            			//Room.setTextSize(3, 10);                			
+                    			));                			
             			Room.setText(cell.toString().trim());
             			tableRow.addView(Room);
             		}
@@ -203,9 +202,30 @@ public class DisplayRoutine extends Activity {
         			Subject2.setText("no Period");
         			tableRow.addView(Subject2);
         		}    		
-        	//Trow[i]=tableRow;	
-        	minr+=rdiff;
+        	Trow[rows]=tableRow;	
+        	minr+=rdiff;        	
+		}		
+		 myWorkBook.close();   
+		 getCurrentClass( Trow, startTime,endTime);
+	}
+	
+	
+	private  void getCurrentClass(TableRow[] row, Date[] Stime,Date[] Etime ){
+		Date date=  new Date();
+		String s=formatter.format(date);
+		try{
+		date=formatter.parse(s);
 		
+		for (int i=0;i<9;i++){
+			if (date.after(Stime[i])&& date.before(Etime[i])){
+				row[i].setBackgroundColor(Color.GREEN);
+				break;
+			}
+		}
+		
+		}
+		catch(Exception e){
+			
 		}
 	}
 }
