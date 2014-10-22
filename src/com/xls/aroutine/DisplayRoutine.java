@@ -45,8 +45,9 @@ public class DisplayRoutine extends Activity {
 		catch (Exception e){}
 		 getCurrentClass( Trow, startTime,endTime);
 		
-		////////////////////time handeler		 
-		 timeHandler.postDelayed(updateTimerThread, (5-calendar.get(Calendar.MINUTE)%5)*1000*60);		 	
+		////////////////////time handeler
+		 int min=(5-calendar.get(Calendar.MINUTE)%5),sec=(60-calendar.get(Calendar.SECOND));		 
+		 timeHandler.postDelayed(updateTimerThread, (min*60+sec)*1000-60000);		 
 	}
 
 	@Override
@@ -254,7 +255,9 @@ public class DisplayRoutine extends Activity {
 	//dont know what it is
 	private Runnable updateTimerThread = new Runnable() {
 			 
-			        public void run() {			            
+			        public void run() {
+			        	TextView t =(TextView) findViewById(R.id.timerr);
+			        	t.setText (t.getText()+"1");
 			            getCurrentClass(Trow, startTime, endTime);
 			            timeHandler.postDelayed(this, 5000*60);
 			        }
