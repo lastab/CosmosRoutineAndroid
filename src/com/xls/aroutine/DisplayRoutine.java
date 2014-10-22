@@ -17,6 +17,8 @@ import org.apache.poi.ss.usermodel.Row;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -31,7 +33,8 @@ public class DisplayRoutine extends Activity {
 	Date[] startTime=new Date[9], 	endTime=new Date[9];
 	
 	
-
+	Calendar calendar = Calendar.getInstance();
+	private Handler timeHandler= new Handler();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,6 +43,10 @@ public class DisplayRoutine extends Activity {
 			displayRoutine(0);
 		}
 		catch (Exception e){}
+		 getCurrentClass( Trow, startTime,endTime);
+		
+		////////////////////time handeler		 
+		 timeHandler.postDelayed(updateTimerThread, (5-calendar.get(Calendar.MINUTE)%5)*1000*60);		 	
 	}
 
 	@Override
@@ -85,7 +92,7 @@ public class DisplayRoutine extends Activity {
         Cell cell= row.getCell(0);
         Day.setText(cell.toString());
         
-        Calendar calendar = Calendar.getInstance();
+        
         
         int today;
         //Check if request is for today or specific day
@@ -109,10 +116,7 @@ public class DisplayRoutine extends Activity {
 		TableLayout disArea= (TableLayout) findViewById(R.id.tblDisplayRoutine);
 		for (int rows=0;rows <9;rows++){			
 		  	TableRow tableRow= new TableRow(this);
-		  	disArea.addView(tableRow);
-        	if (rows%2==0){
-        	tableRow.setBackgroundColor(Color.LTGRAY);
-        	}
+		  	disArea.addView(tableRow);        	
         	tableRow.setLayoutParams(new TableLayout.LayoutParams(
         			TableLayout.LayoutParams.MATCH_PARENT,
         			TableLayout.LayoutParams.MATCH_PARENT,1.0f
@@ -122,8 +126,9 @@ public class DisplayRoutine extends Activity {
         		TextView Period = new TextView(this);
         		Period.setLayoutParams(new TableRow.LayoutParams(
             			TableRow.LayoutParams.MATCH_PARENT,
-            			TableRow.LayoutParams.MATCH_PARENT,1.0f
+            			TableRow.LayoutParams.MATCH_PARENT,1.0f            			
             			));        		
+        		Period.setGravity(Gravity.CENTER);
         		Period.setText(cell.toString().substring(0,1)+". ");
         		tableRow.addView(Period);        		
         		cell=row.getCell(2);
@@ -134,6 +139,7 @@ public class DisplayRoutine extends Activity {
             			TableRow.LayoutParams.MATCH_PARENT,
             			TableRow.LayoutParams.MATCH_PARENT,1.0f
             			));
+        		Time1.setGravity(Gravity.CENTER);
         		temp=timeRange.substring(0,9);
         		temp=temp.replace("a.m.", "");
         		temp=temp.replace("p.m.", "");
@@ -145,6 +151,7 @@ public class DisplayRoutine extends Activity {
             			TableRow.LayoutParams.MATCH_PARENT,
             			TableRow.LayoutParams.MATCH_PARENT,1.0f
             			));
+        		Time2.setGravity(Gravity.CENTER);
         		temp=timeRange.substring(11);
         		temp=temp.replace("a.m.", "");
         		temp=temp.replace("p.m.", "");
@@ -157,6 +164,7 @@ public class DisplayRoutine extends Activity {
             			TableRow.LayoutParams.MATCH_PARENT,
             			TableRow.LayoutParams.MATCH_PARENT,1.0f
             			));            	
+        		Subject2.setGravity(Gravity.CENTER);
         		try{
         			Subject2.setText(cell.toString());
         			tableRow.addView(Subject2);
@@ -167,6 +175,7 @@ public class DisplayRoutine extends Activity {
                 			TableRow.LayoutParams.MATCH_PARENT,
                 			TableRow.LayoutParams.MATCH_PARENT,1.0f
                 			));            			
+        			Teacher.setGravity(Gravity.CENTER);
             		Teacher.setText(cell.toString().trim());
             		tableRow.addView(Teacher);
             		
@@ -177,26 +186,26 @@ public class DisplayRoutine extends Activity {
         			ClassType.setLayoutParams(new TableRow.LayoutParams(
                 			TableRow.LayoutParams.MATCH_PARENT,
                 			TableRow.LayoutParams.MATCH_PARENT,1.0f
-                			));            			
+                			));
+        			ClassType.setGravity(Gravity.CENTER);
             		ClassType.setText(cell.toString().trim());
             		tableRow.addView(ClassType);
-            		
+            		TextView Room = new TextView(this);
             		try{
             			cell=row.getCell(26*4+2);
-            			TextView Room = new TextView(this);
+            			
             			Room.setLayoutParams(new TableRow.LayoutParams(
                     			TableRow.LayoutParams.MATCH_PARENT,
                     			TableRow.LayoutParams.MATCH_PARENT,1.0f
-                    			));                			
+                    			));                		
+            			Room.setGravity(Gravity.CENTER);
             			Room.setText(cell.toString().trim());
             			tableRow.addView(Room);
             		}
-            		catch (Exception e){
-            			TextView Room = new TextView(this);
+            		catch (Exception e){            			
             			Room.setText("No Room");
             			tableRow.addView(Room);
-            		}
-        			
+            		}        			
         		}
         		catch(Exception e){
         			Subject2.setText("no Period");
@@ -206,7 +215,7 @@ public class DisplayRoutine extends Activity {
         	minr+=rdiff;        	
 		}		
 		 myWorkBook.close();   
-		 getCurrentClass( Trow, startTime,endTime);
+		
 	}
 	
 	
@@ -217,10 +226,19 @@ public class DisplayRoutine extends Activity {
 		date=formatter.parse(s);
 		
 		for (int i=0;i<9;i++){
-			if (date.after(Stime[i])&& date.before(Etime[i])){
+			if ((date.after(Stime[i])&& date.before(Etime[i]))||date.equals(Stime[i])){
 				row[i].setBackgroundColor(Color.GREEN);
-				break;
-			}
+				}
+				else if (i%2==0)
+				{
+					row[i].setBackgroundColor(Color.WHITE);					
+				}
+				else
+				{
+					row[i].setBackgroundColor(Color.LTGRAY);
+				}
+				
+			
 		}
 		
 		}
@@ -228,4 +246,19 @@ public class DisplayRoutine extends Activity {
 			
 		}
 	}
+	
+	
+	
+	
+	
+	//dont know what it is
+	private Runnable updateTimerThread = new Runnable() {
+			 
+			        public void run() {			            
+			            getCurrentClass(Trow, startTime, endTime);
+			            timeHandler.postDelayed(this, 5000*60);
+			        }
+			 
+			    };
+	
 }
