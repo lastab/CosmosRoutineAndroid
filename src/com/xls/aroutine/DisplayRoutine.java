@@ -39,7 +39,7 @@ public class DisplayRoutine extends Activity{
 	DateFormat formatter = new SimpleDateFormat("HH:mm");
 	TableRow[] Trow= new TableRow[9];
 	Date[] startTime=new Date[9], 	endTime=new Date[9];
-	int selDay=0;
+	int selDay=0, selPro=0;
 	
 	Calendar calendar = Calendar.getInstance();
 	
@@ -52,9 +52,10 @@ public class DisplayRoutine extends Activity{
 				int arg2, long arg3) {
 			
 			selDay=	sDays.getSelectedItemPosition();
+			selPro=sProgram.getSelectedItemPosition();
 			try {
 				////////////////////
-				displayRoutine(selDay,0);
+				displayRoutine(selDay,selPro);
 				if(selDay==calendar.get(Calendar.DAY_OF_WEEK))
 					getCurrentClass(Trow, startTime, endTime);
 			
@@ -171,6 +172,8 @@ public class DisplayRoutine extends Activity{
         else{
         	today=Tday;
         }*/
+        
+        ////////////////some problem with -1 check later to remove
         int minr= 6+((Tday-1)*39);
         int rdiff=3;         
         
@@ -234,7 +237,7 @@ public class DisplayRoutine extends Activity{
         		Time2.setText(temp);
         		endTime[rows] = (Date)formatter.parse(temp.trim());
         		tableRow.addView(Time2);  		
-        		cell=row.getCell(26*4+1);
+        		cell=row.getCell(75+program*6);
         		TextView Subject2 = new TextView(this);
         		Subject2.setLayoutParams(new TableRow.LayoutParams(
             			TableRow.LayoutParams.MATCH_PARENT,
@@ -245,7 +248,7 @@ public class DisplayRoutine extends Activity{
         			Subject2.setText(cell.toString());
         			tableRow.addView(Subject2);
         			row=mySheet.getRow(minr+1);
-        			cell=row.getCell(26*4+1);
+        			cell=row.getCell(75+program*6);
         			TextView Teacher = new TextView(this);
         			Teacher.setLayoutParams(new TableRow.LayoutParams(
                 			TableRow.LayoutParams.MATCH_PARENT,
@@ -257,7 +260,7 @@ public class DisplayRoutine extends Activity{
             		
             		
             		row=mySheet.getRow(minr+2);
-            		cell=row.getCell(26*4+1);
+            		cell=row.getCell(75+program*6);
         			TextView ClassType = new TextView(this);
         			ClassType.setLayoutParams(new TableRow.LayoutParams(
                 			TableRow.LayoutParams.MATCH_PARENT,
@@ -268,7 +271,7 @@ public class DisplayRoutine extends Activity{
             		tableRow.addView(ClassType);
             		TextView Room = new TextView(this);
             		try{
-            			cell=row.getCell(26*4+2);
+            			cell=row.getCell(75+program*6+1);
             			
             			Room.setLayoutParams(new TableRow.LayoutParams(
                     			TableRow.LayoutParams.MATCH_PARENT,
