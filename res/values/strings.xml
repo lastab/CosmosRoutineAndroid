@@ -4,14 +4,14 @@
     <string name="app_name">ARoutine</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-	<string-array  name="days">
-	    <item >Saturday</item>
+	<string-array  name="days">	    
 	    <item >Sunday</item>
 	    <item >Monday</item>
 	    <item >Tuesday</item>
 	    <item >Wednesday</item>
 	    <item >Thursday</item>
-	    <item >Friday</item>	    
+	    <item >Friday</item>	
+	    <item >Saturday</item>    
 	</string-array>
 	
 	<string-array  name="programs">

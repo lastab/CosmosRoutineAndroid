@@ -174,7 +174,7 @@ public class DisplayRoutine extends Activity{
         }*/
         
         ////////////////some problem with -1 check later to remove
-        int minr= 6+((Tday-1)*39);
+        int minr= 6+((Tday)*39);
         int rdiff=3;         
         
        
@@ -293,7 +293,8 @@ public class DisplayRoutine extends Activity{
         	Trow[rows]=tableRow;	
         	minr+=rdiff;        	
 		}		
-		 myWorkBook.close();   
+		 myWorkBook.close();  
+		 getCurrentClass(Trow, startTime, endTime);
 		
 	}
 	
@@ -304,7 +305,9 @@ public class DisplayRoutine extends Activity{
 		try{
 		date=formatter.parse(s);
 		//if selected day == today
-		if(selDay==calendar.get(Calendar.DAY_OF_WEEK))
+		
+		int checkSelectedday=selDay+1;	
+		if((checkSelectedday)==(calendar.get(Calendar.DAY_OF_WEEK)))
 		for (int i=0;i<9;i++){
 			if ((date.after(Stime[i])&& date.before(Etime[i]))||date.equals(Stime[i])){
 				row[i].setBackgroundColor(Color.GREEN);
