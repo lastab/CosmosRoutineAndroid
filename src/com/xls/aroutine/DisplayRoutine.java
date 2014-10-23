@@ -33,13 +33,13 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 public class DisplayRoutine extends Activity{
-	Spinner sDays ,sProgram;
+	Spinner sDays ,sProgram,sYear;
 	
 			////////////Declerations
 	DateFormat formatter = new SimpleDateFormat("HH:mm");
 	TableRow[] Trow= new TableRow[9];
 	Date[] startTime=new Date[9], 	endTime=new Date[9];
-	int selDay=0, selPro=0;
+	int selDay=0, selPro=0, selYear=0;
 	
 	Calendar calendar = Calendar.getInstance();
 	
@@ -53,9 +53,10 @@ public class DisplayRoutine extends Activity{
 			
 			selDay=	sDays.getSelectedItemPosition();
 			selPro=sProgram.getSelectedItemPosition();
+			selYear=sYear.getSelectedItemPosition();
 			try {
 				////////////////////
-				displayRoutine(selDay,selPro);
+				displayRoutine(selDay,selPro,selYear);
 				if(selDay==calendar.get(Calendar.DAY_OF_WEEK))
 					getCurrentClass(Trow, startTime, endTime);
 			
@@ -86,6 +87,7 @@ public class DisplayRoutine extends Activity{
 			sDays.setAdapter(aDays);
 			sProgram.setOnItemSelectedListener(sometihingSelected);
 			sDays.setOnItemSelectedListener(sometihingSelected);
+			sYear.setOnItemSelectedListener(sometihingSelected);
 			
 			/*new OnItemSelectedListener() {
 
@@ -138,10 +140,8 @@ public class DisplayRoutine extends Activity{
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private void displayRoutine(int Tday, int program) throws Exception{
-		String timeRange,temp;
-		TextView Day =(TextView) findViewById(R.id.txtDay);
-		
+	private void displayRoutine(int Tday, int program, int year) throws Exception{
+		String timeRange,temp;		
 		
 		// Creating Input Stream
         File file = new File("/storage/sdcard0/asd.xls");
@@ -157,31 +157,19 @@ public class DisplayRoutine extends Activity{
         // Get the first sheet from workbook
         HSSFSheet mySheet = myWorkBook.getSheetAt(0);
         
-        Row row=mySheet.getRow(6);
-        
+        Row row=mySheet.getRow(6);        
         Cell cell= row.getCell(0);
-        Day.setText(cell.toString());
         
         
         
-        int today;
-        //Check if request is for today or specific day
-       /* if (Tday==0){
-        today= calendar.get(Calendar.DAY_OF_WEEK);
-        }
-        else{
-        	today=Tday;
-        }*/
         
-        ////////////////some problem with -1 check later to remove
+        int today;      
         int minr= 6+((Tday)*39);
         int rdiff=3;         
         
        
         row=mySheet.getRow(minr);
         cell= row.getCell(0);
-        Day.setText(cell.toString());
-        
         
         
 
@@ -237,7 +225,7 @@ public class DisplayRoutine extends Activity{
         		Time2.setText(temp);
         		endTime[rows] = (Date)formatter.parse(temp.trim());
         		tableRow.addView(Time2);  		
-        		cell=row.getCell(75+program*6);
+        		cell=row.getCell(3+24*year+program*6);
         		TextView Subject2 = new TextView(this);
         		Subject2.setLayoutParams(new TableRow.LayoutParams(
             			TableRow.LayoutParams.MATCH_PARENT,
@@ -248,7 +236,7 @@ public class DisplayRoutine extends Activity{
         			Subject2.setText(cell.toString());
         			tableRow.addView(Subject2);
         			row=mySheet.getRow(minr+1);
-        			cell=row.getCell(75+program*6);
+        			cell=row.getCell(3+24*year+program*6);
         			TextView Teacher = new TextView(this);
         			Teacher.setLayoutParams(new TableRow.LayoutParams(
                 			TableRow.LayoutParams.MATCH_PARENT,
@@ -271,7 +259,7 @@ public class DisplayRoutine extends Activity{
             		tableRow.addView(ClassType);
             		TextView Room = new TextView(this);
             		try{
-            			cell=row.getCell(75+program*6+1);
+            			cell=row.getCell(3+24*year+program*6+1);
             			
             			Room.setLayoutParams(new TableRow.LayoutParams(
                     			TableRow.LayoutParams.MATCH_PARENT,
