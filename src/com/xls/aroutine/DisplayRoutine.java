@@ -21,17 +21,25 @@ import android.os.Handler;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-public class DisplayRoutine extends Activity {
-	////////////Declerations
+public class DisplayRoutine extends Activity{
+	Spinner sDays ;
+	
+			////////////Declerations
 	DateFormat formatter = new SimpleDateFormat("HH:mm");
 	TableRow[] Trow= new TableRow[9];
 	Date[] startTime=new Date[9], 	endTime=new Date[9];
-	
+	int selDay=0;
 	
 	Calendar calendar = Calendar.getInstance();
 	private Handler timeHandler= new Handler();
@@ -40,7 +48,32 @@ public class DisplayRoutine extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_routine);
 		try{
-			displayRoutine(0);
+			sDays=(Spinner) findViewById(R.id.Days);
+			ArrayAdapter aDays=ArrayAdapter.createFromResource(this, R.array.days, android.R.layout.simple_spinner_item);
+			sDays.setAdapter(aDays);
+			sDays.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+				@Override
+				public void onItemSelected(AdapterView<?> arg0, View arg1,
+						int arg2, long arg3) {
+					
+					selDay=	sDays.getSelectedItemPosition();
+					try {
+						displayRoutine(selDay);
+						if(selDay==calendar.get(Calendar.DAY_OF_WEEK))
+							getCurrentClass(Trow, startTime, endTime);
+					
+					} catch (Exception e) {	}
+				}
+
+				@Override
+				public void onNothingSelected(AdapterView<?> arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+			});
+		//  	displayRoutine(0);
 		}
 		catch (Exception e){}
 		 getCurrentClass( Trow, startTime,endTime);
@@ -97,13 +130,13 @@ public class DisplayRoutine extends Activity {
         
         int today;
         //Check if request is for today or specific day
-        if (Tday==0){
+       /* if (Tday==0){
         today= calendar.get(Calendar.DAY_OF_WEEK);
         }
         else{
         	today=Tday;
-        }
-        int minr= 6+((today-1)*39);
+        }*/
+        int minr= 6+((Tday-1)*39);
         int rdiff=3;         
         
        
@@ -115,9 +148,16 @@ public class DisplayRoutine extends Activity {
         
 
 		TableLayout disArea= (TableLayout) findViewById(R.id.tblDisplayRoutine);
+		disArea.removeAllViews();
 		for (int rows=0;rows <9;rows++){			
 		  	TableRow tableRow= new TableRow(this);
-		  	disArea.addView(tableRow);        	
+		  	disArea.addView(tableRow);
+		  	
+		  	if (rows%2==0)
+		  	{tableRow.setBackgroundColor(Color.WHITE);}
+		  	else
+		  	{tableRow.setBackgroundColor(Color.LTGRAY);}
+		  	
         	tableRow.setLayoutParams(new TableLayout.LayoutParams(
         			TableLayout.LayoutParams.MATCH_PARENT,
         			TableLayout.LayoutParams.MATCH_PARENT,1.0f
@@ -225,7 +265,8 @@ public class DisplayRoutine extends Activity {
 		String s=formatter.format(date);
 		try{
 		date=formatter.parse(s);
-		
+		//if selected day == today
+		if(selDay==calendar.get(Calendar.DAY_OF_WEEK))
 		for (int i=0;i<9;i++){
 			if ((date.after(Stime[i])&& date.before(Etime[i]))||date.equals(Stime[i])){
 				row[i].setBackgroundColor(Color.GREEN);
@@ -255,9 +296,7 @@ public class DisplayRoutine extends Activity {
 	//dont know what it is
 	private Runnable updateTimerThread = new Runnable() {
 			 
-			        public void run() {
-			        	TextView t =(TextView) findViewById(R.id.timerr);
-			        	t.setText (t.getText()+"1");
+			        public void run() {			        	
 			            getCurrentClass(Trow, startTime, endTime);
 			            timeHandler.postDelayed(this, 5000*60);
 			        }

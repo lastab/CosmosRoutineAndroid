@@ -20,19 +20,19 @@
         android:id="@+id/tblDisplayRoutine"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/txtDay"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/Days"
         android:gravity="center" >
 
     </TableLayout>
 
-    <TextView
-        android:id="@+id/timerr"
+    <Spinner
+        android:id="@+id/Days"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/txtDay"
-        android:layout_marginLeft="52dp"
-        android:layout_toRightOf="@+id/txtDay"
-        android:text="TextView" />
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtDay"
+        android:layout_marginTop="26dp" />
 
 </RelativeLayout>
