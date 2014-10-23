@@ -34,15 +34,13 @@
         android:layout_alignTop="@+id/Days"
         android:layout_toRightOf="@+id/Days" />
 
-   
-
     <Spinner
-        android:id="@+id/sYear"
+        android:id="@+id/spYear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/tblDisplayRoutine"
         android:layout_alignLeft="@+id/tblDisplayRoutine"
-        android:layout_alignTop="@+id/Days"
+        android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/Days" />
 
 </RelativeLayout>
