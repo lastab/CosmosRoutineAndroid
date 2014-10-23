@@ -11,8 +11,15 @@
 	    <item >Tuesday</item>
 	    <item >Wednesday</item>
 	    <item >Thursday</item>
-	    <item >Friday</item>
-	     
-	    
+	    <item >Friday</item>	    
+	</string-array>
+	
+	<string-array  name="programs">
+	    <item >BBA</item>
+	    <item >BCV(a,b)</item>
+	    <item >BCV(c,d)</item>
+	    <item >BEIT</item>
+	    <item >BEX</item>	    
+	    <item >BCE</item>
 	</string-array>
 </resources>

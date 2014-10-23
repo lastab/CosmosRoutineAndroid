@@ -8,14 +8,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.xls.aroutine.DisplayRoutine" >
 
-    <TextView
-        android:id="@+id/txtDay"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/hello_world" />
-
     <TableLayout
         android:id="@+id/tblDisplayRoutine"
         android:layout_width="match_parent"
@@ -29,10 +21,26 @@
 
     <Spinner
         android:id="@+id/Days"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/txtDay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/txtDay"
-        android:layout_marginTop="26dp" />
+        android:layout_alignBottom="@+id/Days"
+        android:layout_alignLeft="@+id/tblDisplayRoutine"
+        android:layout_marginBottom="14dp"
+        android:text="@string/hello_world" />
+
+    <Spinner
+        android:id="@+id/spinProgram"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/Days"
+        android:layout_alignTop="@+id/Days"
+        android:layout_toRightOf="@+id/Days" />
 
 </RelativeLayout>

@@ -33,7 +33,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 public class DisplayRoutine extends Activity{
-	Spinner sDays ;
+	Spinner sDays ,sProgram;
 	
 			////////////Declerations
 	DateFormat formatter = new SimpleDateFormat("HH:mm");
@@ -42,6 +42,35 @@ public class DisplayRoutine extends Activity{
 	int selDay=0;
 	
 	Calendar calendar = Calendar.getInstance();
+	
+	
+	/////////////
+	OnItemSelectedListener sometihingSelected= new OnItemSelectedListener() {
+
+		@Override
+		public void onItemSelected(AdapterView<?> arg0, View arg1,
+				int arg2, long arg3) {
+			
+			selDay=	sDays.getSelectedItemPosition();
+			try {
+				////////////////////
+				displayRoutine(selDay,0);
+				if(selDay==calendar.get(Calendar.DAY_OF_WEEK))
+					getCurrentClass(Trow, startTime, endTime);
+			
+			} catch (Exception e) {	}
+		}
+		
+		@Override
+		public void onNothingSelected(AdapterView<?> arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	};
+	//////////////
+	
+	
 	private Handler timeHandler= new Handler();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +78,15 @@ public class DisplayRoutine extends Activity{
 		setContentView(R.layout.activity_display_routine);
 		try{
 			sDays=(Spinner) findViewById(R.id.Days);
+			sProgram=(Spinner)findViewById(R.id.spinProgram);
 			ArrayAdapter aDays=ArrayAdapter.createFromResource(this, R.array.days, android.R.layout.simple_spinner_item);
+			ArrayAdapter aPrograms=ArrayAdapter.createFromResource(this, R.array.programs, android.R.layout.simple_spinner_item);
+			sProgram.setAdapter(aPrograms);
 			sDays.setAdapter(aDays);
-			sDays.setOnItemSelectedListener(new OnItemSelectedListener() {
+			sProgram.setOnItemSelectedListener(sometihingSelected);
+			sDays.setOnItemSelectedListener(sometihingSelected);
+			
+			/*new OnItemSelectedListener() {
 
 				@Override
 				public void onItemSelected(AdapterView<?> arg0, View arg1,
@@ -65,14 +100,14 @@ public class DisplayRoutine extends Activity{
 					
 					} catch (Exception e) {	}
 				}
-
+				
 				@Override
 				public void onNothingSelected(AdapterView<?> arg0) {
 					// TODO Auto-generated method stub
 					
 				}
 				
-			});
+			})*/;
 		//  	displayRoutine(0);
 		}
 		catch (Exception e){}
@@ -102,7 +137,7 @@ public class DisplayRoutine extends Activity{
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private void displayRoutine(int Tday) throws Exception{
+	private void displayRoutine(int Tday, int program) throws Exception{
 		String timeRange,temp;
 		TextView Day =(TextView) findViewById(R.id.txtDay);
 		
